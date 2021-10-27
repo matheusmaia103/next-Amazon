@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import {
   Button,
+  CardActionArea,
   Grid,
   IconButton,
   List,
@@ -14,6 +15,9 @@ import Head from 'next/head';
 import NextLink from 'next/link';
 import { AddShoppingCartRounded, KeyboardReturnRounded } from '@material-ui/icons';
 import slugStyles from '../../styles/slugStyles';
+import { useContext } from 'react';
+import { Store } from '../../styles/Store';
+
 
 export default function ProductScreen() {
   const router = useRouter();
@@ -22,6 +26,9 @@ export default function ProductScreen() {
   if (!product) {
     return <div>Produto não encontrado</div>;
   }
+
+  const {state} = useContext(Store);
+  const {darkMode} = state;
 
   const classes = slugStyles();
 
@@ -41,16 +48,16 @@ export default function ProductScreen() {
         ></meta>
       </Head>
       <NextLink href="/" passHref>
-        <IconButton title="back" color='primary'>
+        <IconButton title="back" color={darkMode ? 'secondary' : 'primary'}>
           <KeyboardReturnRounded />
         </IconButton>
       </NextLink>
-      <Divider textAlign='center' className={classes.title}>
+      <Divider textAlign="center" className={classes.title}>
         <Typography variant="h1" component="h1">
           {product.name}
         </Typography>
       </Divider>
-        <br />
+      <br />
       <Grid container spacing={2}>
         <Grid item md={6} sm={12} xs={12}>
           <Image
@@ -64,7 +71,7 @@ export default function ProductScreen() {
         </Grid>
         <Grid container md={6} sm={12} xs={12}>
           <Grid item md={12} sm={6} xs={12}>
-            <Card>
+            <Card variant="outlined">
               <List>
                 <ListItem>
                   <Grid container>
@@ -89,7 +96,12 @@ export default function ProductScreen() {
                   </Grid>
                 </ListItem>
                 <ListItem>
-                  <Button fullWidth startIcon={<AddShoppingCartRounded />} variant="contained" color="secondary">
+                  <Button
+                    fullWidth
+                    startIcon={<AddShoppingCartRounded />}
+                    variant="contained"
+                    color="secondary"
+                  >
                     Add to cart
                   </Button>
                 </ListItem>
@@ -98,18 +110,18 @@ export default function ProductScreen() {
           </Grid>
 
           <Grid item md={12} sm={6} xs={12}>
-            <List>
-              <ListItem>
-                <Typography component="h2">
-                  Category: {product.category}
-                </Typography>
-              </ListItem>
-              <ListItem>Brand: {product.brand}</ListItem>
-              <ListItem>
-                Rating: {product.rating} stars ({product.numReviews} reviews){' '}
-              </ListItem>
-              <ListItem>Description: {product.description}</ListItem>
-            </List>
+              <List>
+                <ListItem>
+                  <Typography component="h2">
+                    Category: {product.category}
+                  </Typography>
+                </ListItem>
+                <ListItem>Brand: {product.brand}</ListItem>
+                <ListItem>
+                  Rating: {product.rating} stars ({product.numReviews} reviews){' '}
+                </ListItem>
+                <ListItem>Description: {product.description}</ListItem>
+              </List>
           </Grid>
         </Grid>
       </Grid>

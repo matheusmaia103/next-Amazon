@@ -1,15 +1,17 @@
 import Layout from '../components/Layout';
 import App from 'next/app';
 import Head from 'next/head';
-import Router from 'next/router'
+import Router from 'next/router';
 import { ThemeProvider } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../styles/theme.js';
 import NProgress from 'nprogress';
+import { StoreProvider } from '../styles/Store';
+import { Button } from '@material-ui/core';
 
 Router.events.on('routeChangeStart', (url) => {
   NProgress.start();
-})
+});
 
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
@@ -35,14 +37,13 @@ class MyApp extends App {
             content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
           />
         </Head>
-        <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
+          <StoreProvider>
+            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
 
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ThemeProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </StoreProvider>
       </>
     );
   }

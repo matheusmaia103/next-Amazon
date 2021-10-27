@@ -10,7 +10,7 @@ const useStyles = makeStyles({
   main: {
     minHeight: '80vh',
     maxWidth: '1000px',
-    padding: '30px 10px',
+    padding: '30px 0',
   },
   brand: {
     fontWeight: 'bolder',

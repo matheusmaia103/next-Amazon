@@ -2,8 +2,7 @@ import { makeStyles } from '@material-ui/core';
 
 const landingPageStyles = makeStyles({
   card: {
-    boxShadow: 'grey 0px 0px 20px -4px',
-    borderRadius: '10px',
+    minHeight: '438px',
   },
   title: {
     fontWeight: '600',
