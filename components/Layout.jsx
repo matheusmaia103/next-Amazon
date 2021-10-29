@@ -44,8 +44,11 @@ export default function Layout({ children }) {
       error: {
         main: red.A400,
       },
+      divider: 'rgba(48 47 47 / 69%)',
       background: {
-        default: '#fff',
+        default: '#ee2222',
+        paper: darkMode ? '#121212' : '#fff',
+        card: darkMode ? '#fc0404' : '#48d12d',
       },
     },
     typography: {
@@ -76,8 +79,7 @@ export default function Layout({ children }) {
             <div className={classes.grow}></div>
             <div>
               <Switch
-              defaultChecked={darkMode}
-                checked={darkMode ? true : false}
+                checked={darkMode}
                 onChange={darkModeHandler}
               />
               <NextLink href="/cart" passHref>
@@ -93,7 +95,7 @@ export default function Layout({ children }) {
             </div>
           </Toolbar>
         </AppBar>
-        <Container className={classes.main}>{children}</Container>
+        <Container className={classes.main} component='main'>{children}</Container>
         <footer className={classes.footer}>
           <Typography>All rights reserved. Amazon</Typography>
         </footer>

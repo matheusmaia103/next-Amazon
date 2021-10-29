@@ -34,7 +34,12 @@ export default function Home() {
       <Grid container spacing={5}>
         {data.products.map((product) => (
           <Grid item md={4} sm={6} key={product.name}>
-            <Card className={classes.card} elevation={8}>
+            <Card
+              className={classes.card}
+              variant='elevation'
+              elevation={8}
+              color='primary'
+            >
               <NextLink href={`/product/${product.slug}`}>
                 <CardActionArea>
                   <CardMedia component="img" image={product.image} />

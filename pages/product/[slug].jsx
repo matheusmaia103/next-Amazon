@@ -52,14 +52,14 @@ export default function ProductScreen() {
           <KeyboardReturnRounded />
         </IconButton>
       </NextLink>
-      <Divider textAlign="center" className={classes.title}>
+      <Divider textAlign="center" className={classes.divider}>
         <Typography variant="h1" component="h1">
           {product.name}
         </Typography>
       </Divider>
       <br />
-      <Grid container spacing={2}>
-        <Grid item md={6} sm={12} xs={12}>
+      <Grid container spacing={2} >
+        <Grid item md={7} sm={12} xs={12}>
           <Image
             title={product.name}
             src={product.image}
@@ -69,9 +69,9 @@ export default function ProductScreen() {
             alt={product.name}
           />
         </Grid>
-        <Grid container md={6} sm={12} xs={12}>
+        <Grid container md={5} sm={12} xs={12}>
           <Grid item md={12} sm={6} xs={12}>
-            <Card variant="outlined">
+            <Card variant="outlined" variant="outlined" className={classes.darkCard}>
               <List>
                 <ListItem>
                   <Grid container>
@@ -110,18 +110,18 @@ export default function ProductScreen() {
           </Grid>
 
           <Grid item md={12} sm={6} xs={12}>
-              <List>
-                <ListItem>
-                  <Typography component="h2">
-                    Category: {product.category}
-                  </Typography>
-                </ListItem>
-                <ListItem>Brand: {product.brand}</ListItem>
-                <ListItem>
-                  Rating: {product.rating} stars ({product.numReviews} reviews){' '}
-                </ListItem>
-                <ListItem>Description: {product.description}</ListItem>
-              </List>
+            <List>
+              <ListItem>
+                <Typography component="h2">
+                  Category: {product.category}
+                </Typography>
+              </ListItem>
+              <ListItem>Brand: {product.brand}</ListItem>
+              <ListItem>
+                Rating: {product.rating} stars ({product.numReviews} reviews){' '}
+              </ListItem>
+              <ListItem>Description: {product.description}</ListItem>
+            </List>
           </Grid>
         </Grid>
       </Grid>
