@@ -27,6 +27,9 @@ export default function ProductScreen(props) {
 
 
   if (!product) {
+    setTimeout(function(){
+      return 0
+    }, 4000)
     return <div>Produto não encontrado</div>;
   }
 
