@@ -15,7 +15,7 @@ import NextLink from 'next/link';
 import { PersonRounded, ShoppingCartRounded } from '@material-ui/icons';
 import { red } from '@material-ui/core/colors';
 import NProgressStyles from '../styles/nprogressStyle';
-import { Store, Provider, Consumer } from '../styles/Store';
+import { Store, Provider, Consumer } from '../utils/Store';
 import { CssBaseline } from '@mui/material';
 import { useEffect, useState, useContext } from 'react';
 import Cookies from 'js-cookie';
@@ -26,6 +26,7 @@ export default function Layout({ children }) {
   const { state, dispatch } = useContext(Store);
   const { darkMode } = state;
 
+  
   const darkModeHandler = () => {
     dispatch({ type: darkMode ? 'DARK_MODE_OFF' : 'DARK_MODE_ON' });
     const newDarkMode = !darkMode;
@@ -63,6 +64,9 @@ export default function Layout({ children }) {
         margin: '1 rem 0',
       },
     },
+    root: {
+      textTransform: 'none',
+    },
   });
   return (
     <ThemeProvider theme={theme}>
@@ -78,10 +82,7 @@ export default function Layout({ children }) {
             </NextLink>
             <div className={classes.grow}></div>
             <div>
-              <Switch
-                checked={darkMode}
-                onChange={darkModeHandler}
-              />
+              <Switch checked={darkMode} onChange={darkModeHandler} />
               <NextLink href="/cart" passHref>
                 <IconButton color="secondary" title="cart">
                   <ShoppingCartRounded color="secondary" />
@@ -95,7 +96,13 @@ export default function Layout({ children }) {
             </div>
           </Toolbar>
         </AppBar>
-        <Container className={classes.main} component='main'>{children}</Container>
+        <Container
+          style={{ minHeight: '100vh' }}
+          className={classes.main}
+          component="main"
+        >
+          {children}
+        </Container>
         <footer className={classes.footer}>
           <Typography>All rights reserved. Amazon</Typography>
         </footer>

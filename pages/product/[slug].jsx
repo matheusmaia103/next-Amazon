@@ -10,19 +10,22 @@ import {
   Typography,
 } from '@material-ui/core';
 import { Card, Divider } from '@mui/material';
-import data from '../../public/data';
+import data from '../../utils/data';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import { AddShoppingCartRounded, KeyboardReturnRounded } from '@material-ui/icons';
 import slugStyles from '../../styles/slugStyles';
-import { useContext } from 'react';
-import { Store } from '../../styles/Store';
+import { useContext, useEffect } from 'react';
+import { Store } from '../../utils/Store';
+import Product from '../../models/Product';
+import db from '../../utils/db';
 
 
-export default function ProductScreen() {
-  const router = useRouter();
-  const { slug } = router.query;
-  const product = data.products.find((a) => a.slug === slug);
+export default function ProductScreen(props) {
+  console.clear();
+   const { product } = props;
+
+
   if (!product) {
     return <div>Produto não encontrado</div>;
   }
@@ -30,7 +33,12 @@ export default function ProductScreen() {
   const {state} = useContext(Store);
   const {darkMode} = state;
 
+
   const classes = slugStyles();
+
+  const addToCartHandler = () =>{
+    console.log('adicionado')
+  }
 
   return (
     <div>
@@ -48,7 +56,7 @@ export default function ProductScreen() {
         ></meta>
       </Head>
       <NextLink href="/" passHref>
-        <IconButton title="back" color={darkMode ? 'secondary' : 'primary'}>
+        <IconButton title="back" color={!darkMode ? 'primary' : 'secondary'}>
           <KeyboardReturnRounded />
         </IconButton>
       </NextLink>
@@ -58,7 +66,7 @@ export default function ProductScreen() {
         </Typography>
       </Divider>
       <br />
-      <Grid container spacing={2} >
+      <Grid container spacing={2}>
         <Grid item md={7} sm={12} xs={12}>
           <Image
             title={product.name}
@@ -71,24 +79,24 @@ export default function ProductScreen() {
         </Grid>
         <Grid container md={5} sm={12} xs={12}>
           <Grid item md={12} sm={6} xs={12}>
-            <Card variant="outlined" variant="outlined" className={classes.darkCard}>
+            <Card variant="outlined" className={classes.darkCard}>
               <List>
                 <ListItem>
                   <Grid container>
-                    <Grid item xs={6}>
+                    <Grid item md={6} xs={6} sm={6}>
                       <Typography>Price</Typography>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item md={6} xs={6} sm={6}>
                       <Typography>${product.price}</Typography>
                     </Grid>
                   </Grid>
                 </ListItem>
                 <ListItem>
                   <Grid container>
-                    <Grid item xs={6}>
+                    <Grid item md={6} xs={6} sm={6}>
                       <Typography>Status</Typography>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item md={6} xs={6} sm={6}>
                       <Typography>
                         {product.countInStock > 0 ? 'On stock' : 'Unavailable'}
                       </Typography>
@@ -101,6 +109,7 @@ export default function ProductScreen() {
                     startIcon={<AddShoppingCartRounded />}
                     variant="contained"
                     color="secondary"
+                    onClick={addToCartHandler}
                   >
                     Add to cart
                   </Button>
@@ -127,4 +136,32 @@ export default function ProductScreen() {
       </Grid>
     </div>
   );
+}
+export async function getStaticPaths(context) {
+  
+  await db.connect();
+  const products = await Product.find({ }).lean();
+  await db.disconnect();
+
+  const paths = products.map(product => {
+    return {params: {slug: product.slug}}
+  })
+
+  return {
+    paths,
+    fallback: true,
+  };
+}
+export async function getStaticProps(context) {
+  const { params } = context;
+  const { slug } = params;
+
+  await db.connect();
+  const product = await Product.findOne({ slug }).lean();
+  await db.disconnect();
+  return {
+    props: {
+      product: db.convertDocToObj(product),
+    },
+  };
 }

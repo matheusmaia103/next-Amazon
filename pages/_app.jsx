@@ -6,7 +6,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../styles/theme.js';
 import NProgress from 'nprogress';
-import { StoreProvider } from '../styles/Store';
+import { StoreProvider } from '../utils/Store';
 import { Button } from '@material-ui/core';
 
 Router.events.on('routeChangeStart', (url) => {

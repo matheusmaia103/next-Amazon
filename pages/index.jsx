@@ -11,11 +11,17 @@ import {
   IconButton,
   Typography,
 } from '@material-ui/core';
-import data from '../public/data';
+import data from '../utils/data';
 import { AddShoppingCartRounded } from '@material-ui/icons';
 import landingPageStyles from '../styles/landingPage';
+import db from '../utils/db';
+import Product from '../models/Product';
 
-export default function Home() {
+export default function Home(props) {
+
+  const {products} = props;
+  console.log(products);
+  
   const classes = landingPageStyles();
 
   return (
@@ -32,13 +38,13 @@ export default function Home() {
         Product list
       </Typography>
       <Grid container spacing={5}>
-        {data.products.map((product) => (
+        {products.map((product) => (
           <Grid item md={4} sm={6} key={product.name}>
             <Card
               className={classes.card}
-              variant='elevation'
+              variant="elevation"
               elevation={8}
-              color='primary'
+              color="primary"
             >
               <NextLink href={`/product/${product.slug}`}>
                 <CardActionArea>
@@ -62,4 +68,16 @@ export default function Home() {
       </Grid>
     </>
   );
+}
+
+
+export async function getServerSideProps(){
+  await db.connect();
+  const products = await Product.find({}).lean();
+  await db.disconnect();
+  return {
+    props: {
+      products: products.map(db.convertDocToObj),
+    },
+  }
 }
