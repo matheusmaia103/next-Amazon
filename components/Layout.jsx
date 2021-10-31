@@ -9,6 +9,7 @@ import {
   Switch,
   createTheme,
   ThemeProvider,
+  Badge
 } from '@material-ui/core';
 import useStyles from '../styles/styles';
 import NextLink from 'next/link';
@@ -24,8 +25,9 @@ export default function Layout({ children }) {
   const classes = useStyles();
 
   const { state, dispatch } = useContext(Store);
-  const { darkMode } = state;
-
+  const { darkMode, cart } = state;
+  const { cartItems } = cart;
+  console.log(cart);
   
   const darkModeHandler = () => {
     dispatch({ type: darkMode ? 'DARK_MODE_OFF' : 'DARK_MODE_ON' });
@@ -47,9 +49,8 @@ export default function Layout({ children }) {
       },
       divider: 'rgba(48 47 47 / 69%)',
       background: {
-        default: '#ee2222',
+        default: darkMode ? '#2e2d2d' : '#cac7c7',
         paper: darkMode ? '#121212' : '#fff',
-        card: darkMode ? '#fc0404' : '#48d12d',
       },
     },
     typography: {
@@ -65,13 +66,15 @@ export default function Layout({ children }) {
       },
     },
     root: {
-      textTransform: 'none',
+      button: {
+        textTransform: 'none',
+      },
     },
   });
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Paper variant="elevation" elevation={0}>
+      <Paper className={classes.paper}>
         <NProgressStyles />
         <AppBar className={classes.navbar} color="primary" position="static">
           <Toolbar>
@@ -85,7 +88,16 @@ export default function Layout({ children }) {
               <Switch checked={darkMode} onChange={darkModeHandler} />
               <NextLink href="/cart" passHref>
                 <IconButton color="secondary" title="cart">
-                  <ShoppingCartRounded color="secondary" />
+                  {cartItems.length > 0 ? (
+                    <Badge
+                      color="success"
+                      badgeContent={cart.cartItems.length}
+                    >
+                      <ShoppingCartRounded color="secondary" />
+                    </Badge>
+                  ) : (
+                    <ShoppingCartRounded color="secondary" />
+                  )}
                 </IconButton>
               </NextLink>
               <NextLink href="/login" passHref>

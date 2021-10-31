@@ -19,12 +19,12 @@ import { useContext, useEffect } from 'react';
 import { Store } from '../../utils/Store';
 import Product from '../../models/Product';
 import db from '../../utils/db';
+import axios from 'axios';
 
 
 export default function ProductScreen(props) {
-  console.clear();
    const { product } = props;
-
+   const router = useRouter();
 
   if (!product) {
     setTimeout(function(){
@@ -33,15 +33,24 @@ export default function ProductScreen(props) {
     return <div>Produto não encontrado</div>;
   }
 
-  const {state} = useContext(Store);
-  const {darkMode} = state;
+  const {state, dispatch} = useContext(Store);
+  const {darkMode, cart} = state;
+  const {cartItems} = cart;
+  
+  const existingItem = cartItems.find(item => item._id === product._id);
 
 
   const classes = slugStyles();
 
-  const addToCartHandler = () =>{
-    console.log('adicionado')
-  }
+  const addToCartHandler = async () =>{
+    const {data} = await axios.get(`/api/products/${product._id}`);
+    if(data.countInStock <= 0 ) {
+      alert('Sorry. Product is out of stock!');
+      return;
+    }
+    dispatch({type: 'CART_ADD_ITEM', payload: {...product, quantity: 1}});
+    router.push('/cart');
+  };
 
   return (
     <div>
@@ -82,7 +91,7 @@ export default function ProductScreen(props) {
         </Grid>
         <Grid container md={5} sm={12} xs={12}>
           <Grid item md={12} sm={6} xs={12}>
-            <Card variant="outlined" className={classes.darkCard}>
+            <Card variant={darkMode ? 'outlined' : 'elevation'} elevation={16} className={classes.darkCard}>
               <List>
                 <ListItem>
                   <Grid container>
@@ -114,7 +123,7 @@ export default function ProductScreen(props) {
                     color="secondary"
                     onClick={addToCartHandler}
                   >
-                    Add to cart
+                    {existingItem ? 'Item in cart' : 'Add to cart'}
                   </Button>
                 </ListItem>
               </List>

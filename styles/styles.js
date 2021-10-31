@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   navbar: {
     '& a': {
       color: '#ffffff',
@@ -25,6 +25,9 @@ const useStyles = makeStyles({
   footer: {
     textAlign: 'center',
   },
-});
+  paper: {
+    borderRadius: '0px',
+  },
+}));
 
 export default useStyles;
